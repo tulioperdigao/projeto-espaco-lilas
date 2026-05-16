@@ -1,4 +1,21 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+} from '@nestjs/common'
+import { ApiResponse } from '@nestjs/swagger'
+import {
+  ProceduresRequestCreateDto,
+  ProceduresRequestUpdateDto,
+  ProceduresResponseDto,
+} from '../dtos'
 import { ProceduresService } from '../services'
 
 @Controller({
@@ -9,27 +26,40 @@ export class ProceduresController {
   constructor(private readonly proceduresService: ProceduresService) {}
 
   @Get()
+  @ApiResponse({
+    type: [ProceduresResponseDto],
+  })
   findAll() {
     return this.proceduresService.findAll()
   }
 
   @Get(':id')
-  findById(@Param('id') id: string) {
+  @ApiResponse({
+    type: ProceduresResponseDto,
+  })
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.proceduresService.findById(id)
   }
 
   @Post()
-  create(@Body() data: any) {
+  @ApiResponse({
+    type: ProceduresResponseDto,
+  })
+  create(@Body() data: ProceduresRequestCreateDto) {
     return this.proceduresService.create(data)
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: any) {
+  @ApiResponse({
+    type: ProceduresResponseDto,
+  })
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() data: ProceduresRequestUpdateDto) {
     return this.proceduresService.update(id, data)
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.proceduresService.delete(id)
   }
 }
