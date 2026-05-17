@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class ProceduresResponseDto {
-  constructor(partial: Partial<ProceduresResponseDto>) {
+  constructor(partial?: Partial<ProceduresResponseDto>) {
     Object.assign(this, partial)
   }
 
