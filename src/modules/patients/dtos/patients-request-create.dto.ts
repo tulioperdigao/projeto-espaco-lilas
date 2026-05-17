@@ -36,7 +36,6 @@ export class PatientsRequestCreateDto {
   email!: string
 
   @ApiProperty({ description: 'Patient phone number' })
-  @IsString()
   @IsNotEmpty()
   @IsPhoneNumber('BR')
   phoneNumber!: string

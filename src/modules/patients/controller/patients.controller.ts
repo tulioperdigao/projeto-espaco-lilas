@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
 } from '@nestjs/common'
@@ -32,7 +33,7 @@ export class PatientsController {
   @ApiResponse({
     type: PatientsResponseDto,
   })
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.patientService.findById(id)
   }
 
@@ -48,13 +49,13 @@ export class PatientsController {
   @ApiResponse({
     type: PatientsResponseDto,
   })
-  update(@Param('id') id: string, @Body() data: PatientsRequestUpdateDto) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() data: PatientsRequestUpdateDto) {
     return this.patientService.update(id, data)
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.patientService.delete(id)
   }
 }
