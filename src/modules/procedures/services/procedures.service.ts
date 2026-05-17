@@ -1,24 +1,43 @@
 import { Injectable } from '@nestjs/common'
+import { PrismaService } from 'src/prisma.service'
+import { ProceduresRequestCreateDto, ProceduresRequestUpdateDto } from '../dtos'
 
 @Injectable()
 export class ProceduresService {
+  constructor(private readonly prisma: PrismaService) {}
+
   findAll() {
-    return ['teste1', 'teste2']
+    return this.prisma.procedure.findMany()
   }
 
   findById(id: string) {
-    return `teste com id ${id} como Param`
+    return this.prisma.procedure.findFirst({
+      where: {
+        id,
+      },
+    })
   }
 
-  create(data: any) {
-    return `teste com ${data} no Body`
+  create(data: ProceduresRequestCreateDto) {
+    return this.prisma.procedure.create({
+      data,
+    })
   }
 
-  update(id: string, data: any) {
-    return `teste com id ${id} como Param e com ${data} no Body`
+  update(id: string, data: ProceduresRequestUpdateDto) {
+    return this.prisma.procedure.update({
+      where: {
+        id,
+      },
+      data,
+    })
   }
 
   delete(id: string) {
-    return `teste rota delete com id ${id} como Param`
+    return this.prisma.procedure.delete({
+      where: {
+        id,
+      },
+    })
   }
 }
