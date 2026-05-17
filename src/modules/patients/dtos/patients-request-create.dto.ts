@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { Gender } from '@prisma/client'
 import {
   IsDateString,
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsPhoneNumber,
@@ -44,10 +46,10 @@ export class PatientsRequestCreateDto {
   @IsNotEmpty()
   birthDate!: string
 
-  @ApiProperty({ description: 'Patient gender', required: false })
-  @IsString()
+  @ApiProperty({ description: 'Patient gender', enum: Gender, example: Gender.M, required: false })
+  @IsEnum(Gender)
   @IsOptional()
-  gender?: string
+  gender?: Gender
 
   @ApiProperty({ description: 'Patient observations', required: false })
   @IsString()

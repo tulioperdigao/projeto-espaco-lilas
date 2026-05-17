@@ -17,6 +17,11 @@ model Procedure {
   updatedAt DateTime @updatedAt()
 }
 
+enum Gender {
+  M
+  F
+}
+
 model Patient {
   id String @id @default(uuid())
   name String
@@ -24,7 +29,7 @@ model Patient {
   email String
   phoneNumber String
   birthDate DateTime
-  gender String?
+  gender Gender?
   observations String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
