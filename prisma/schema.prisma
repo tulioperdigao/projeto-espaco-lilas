@@ -12,9 +12,11 @@ model Procedure {
   name String
   description String?
   durationInMinutes Int
-  price Float
+  price Decimal @db.Decimal(10, 2)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
+
+  appointments Appointment[]
 }
 
 enum Gender {
@@ -28,11 +30,14 @@ model Patient {
   cpf String @unique
   email String
   phoneNumber String
-  birthDate DateTime
+  birthDate DateTime @db.Date
   gender Gender?
   observations String?
+  isActive Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
+
+  appointments Appointment[]
 }
 
 model Professional {
@@ -41,8 +46,42 @@ model Professional {
   cpf String @unique
   email String
   phoneNumber String
-  birthDate DateTime
+  birthDate DateTime @db.Date
   specialty String?
+  isActive Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
+
+  appointments Appointment[]
+}
+
+enum AppointmentStatus {
+  AGENDADO
+  CONFIRMADO
+  CANCELADO
+  FINALIZADO
+}
+
+model Appointment {
+  id String @id @default(uuid())
+  description String?
+  startAt DateTime
+  endAt DateTime
+  status AppointmentStatus @default(AGENDADO)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  patient Patient @relation(fields: [patientId], references: [id])
+  patientId String
+
+  professional Professional @relation(fields: [professionalId], references: [id])
+  professionalId String
+
+  procedure Procedure @relation(fields: [procedureId], references: [id])
+  procedureId String
+
+  @@index([patientId])
+  @@index([professionalId])
+  @@index([procedureId])
+  @@index([startAt])
 }

@@ -7,13 +7,18 @@ export class PatientsService {
   constructor(private readonly prisma: PrismaService) {}
 
   findAll() {
-    return this.prisma.patient.findMany()
+    return this.prisma.patient.findMany({
+      where: {
+        isActive: true,
+      },
+    })
   }
 
   findById(id: string) {
     return this.prisma.patient.findFirst({
       where: {
         id,
+        isActive: true,
       },
     })
   }
@@ -39,11 +44,18 @@ export class PatientsService {
     })
   }
 
-  delete(id: string) {
-    return this.prisma.patient.delete({
+  async delete(id: string) {
+    await this.prisma.patient.update({
       where: {
         id,
       },
+      data: {
+        isActive: false,
+      },
     })
+
+    return {
+      message: 'Patient deleted successfully',
+    }
   }
 }

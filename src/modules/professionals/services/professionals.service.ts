@@ -7,13 +7,18 @@ export class ProfessionalsService {
   constructor(private readonly prisma: PrismaService) {}
 
   findAll() {
-    return this.prisma.professional.findMany()
+    return this.prisma.professional.findMany({
+      where: {
+        isActive: true,
+      },
+    })
   }
 
   findById(id: string) {
     return this.prisma.professional.findFirst({
       where: {
         id,
+        isActive: true,
       },
     })
   }
@@ -27,7 +32,7 @@ export class ProfessionalsService {
     })
   }
 
-  update(id: string, data: ProfessionalsRequestUpdateDto) {
+  async update(id: string, data: ProfessionalsRequestUpdateDto) {
     return this.prisma.professional.update({
       where: {
         id,
@@ -39,11 +44,18 @@ export class ProfessionalsService {
     })
   }
 
-  delete(id: string) {
-    return this.prisma.professional.delete({
+  async delete(id: string) {
+    await this.prisma.professional.update({
       where: {
         id,
       },
+      data: {
+        isActive: false,
+      },
     })
+
+    return {
+      message: 'Professional deleted successfuly.',
+    }
   }
 }
